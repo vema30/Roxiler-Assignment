@@ -37,28 +37,33 @@ router.post("/login", async (req, res) => {
 // POST /auth/update-password
 router.post("/update-password", authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
-      return res.status(400).json({ message: "All fields required" });
+      return res.status(400).json({ message: "Both current and new passwords are required" });
     }
 
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    // Optional: validate new password strength using your helper
+    if (!passwordValid(newPassword)) {
+      return res.status(400).json({ message: "New password does not meet requirements" });
+    }
 
-    const valid = await bcrypt.compare(currentPassword, user.password);
-    if (!valid) return res.status(400).json({ message: "Incorrect password" });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    const hash = await bcrypt.hash(newPassword, 10);
+    // Compare with stored hash field (you use passwordHash in registration/login)
+    const match = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!match) return res.status(400).json({ message: "Current password is incorrect" });
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: { password: hash }
-    });
+    const newHash = await bcrypt.hash(newPassword, 10);
+    user.passwordHash = newHash;
+    await user.save();
 
-    res.json({ message: "Password updated successfully!" });
+    return res.json({ message: "Password updated successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("update-password error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
