@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { nameValid, emailValid, passwordValid } from "../utils/validators.js";
+import { authenticate } from "../middlewares/auth.js";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "change_this";
@@ -35,7 +36,7 @@ router.post("/login", async (req, res) => {
   res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
 });
 // POST /auth/update-password
-router.post("/update-password", authMiddleware, async (req, res) => {
+router.post("/update-password", authenticate, async (req, res) => {
   try {
     const userId = req.user?.id;
     const { currentPassword, newPassword } = req.body;
