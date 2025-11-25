@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UpdatePassword() {
-    const API = "https://roxiler-assignment-dsck.onrender.com/";
+    const API = "https://roxiler-assignment-dsck.onrender.com";
   const navigate = useNavigate();
 
   const [form, setForm] = useState({

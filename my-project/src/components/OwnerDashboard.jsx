@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function OwnerDashboard() {
-    const API = "https://roxiler-assignment-dsck.onrender.com/";
+    const API = "https://roxiler-assignment-dsck.onrender.com";
 
   const [data, setData] = useState(null);
   const [msg, setMsg] = useState("");

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 export default function AdminCreateStore() {
   
-  const API = "https://roxiler-assignment-dsck.onrender.com/";
+  const API = "https://roxiler-assignment-dsck.onrender.com";
 
   const [form, setForm] = useState({
     name: "",

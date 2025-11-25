@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function StoreList() {
-   const API = "https://roxiler-assignment-dsck.onrender.com/";
+   const API = "https://roxiler-assignment-dsck.onrender.com";
   const [stores, setStores] = useState([]);
   const [ratingMap, setRatingMap] = useState({});
   const [loading, setLoading] = useState(true);

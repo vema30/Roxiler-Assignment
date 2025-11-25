@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 export default function AdminCreateUser() {
-  const API = "https://roxiler-assignment-dsck.onrender.com/";
+  const API = "https://roxiler-assignment-dsck.onrender.com";
 
   const [form, setForm] = useState({
     name: "",

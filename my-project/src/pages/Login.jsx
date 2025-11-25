@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-    const API = "https://roxiler-assignment-dsck.onrender.com/";
+    const API = "https://roxiler-assignment-dsck.onrender.com";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");

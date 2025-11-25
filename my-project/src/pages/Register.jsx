@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-   const API = "https://roxiler-assignment-dsck.onrender.com/";
+    const API = "https://roxiler-assignment-dsck.onrender.com";
   const [form, setForm] = useState({
     name: "",
     email: "",
