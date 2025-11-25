@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
- // const API = import.meta.env.VITE_API_URL;
-const API = "http://localhost:5000";
+  const API = "http://localhost:5000";
 
   const [dash, setDash] = useState(null);
   const [msg, setMsg] = useState("");
@@ -14,8 +13,8 @@ const API = "http://localhost:5000";
     try {
       const res = await fetch(`${API}/admin/stores/dashboard`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await res.json();
@@ -36,53 +35,43 @@ const API = "http://localhost:5000";
     loadDashboard();
   }, []);
 
-  if (!dash) return <div>Loading dashboard...</div>;
+  if (!dash)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl">
+        Loading dashboard...
+      </div>
+    );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Admin Dashboard</h2>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-6">Admin Dashboard</h2>
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+      {msg && <p className="text-red-600 text-center mb-4">{msg}</p>}
 
-      <div style={{ display: "flex", gap: "20px", marginTop: "15px" }}>
-        <div
-          style={{
-            padding: "12px",
-            background: "#f6f6f6",
-            borderRadius: "8px",
-            minWidth: "150px",
-            textAlign: "center"
-          }}
-        >
-          <strong>Total Users</strong>
-          <div>{dash.totalUsers}</div>
+      {/* Stats Cards */}
+      <div className="grid md:grid-cols-3 gap-6 mt-6">
+
+        <div className="bg-white shadow-md rounded-xl p-6 text-center border border-gray-200">
+          <strong className="text-xl">Total Users</strong>
+          <div className="text-3xl font-bold text-blue-600 mt-2">
+            {dash.totalUsers}
+          </div>
         </div>
 
-        <div
-          style={{
-            padding: "12px",
-            background: "#f6f6f6",
-            borderRadius: "8px",
-            minWidth: "150px",
-            textAlign: "center"
-          }}
-        >
-          <strong>Total Stores</strong>
-          <div>{dash.totalStores}</div>
+        <div className="bg-white shadow-md rounded-xl p-6 text-center border border-gray-200">
+          <strong className="text-xl">Total Stores</strong>
+          <div className="text-3xl font-bold text-green-600 mt-2">
+            {dash.totalStores}
+          </div>
         </div>
 
-        <div
-          style={{
-            padding: "12px",
-            background: "#f6f6f6",
-            borderRadius: "8px",
-            minWidth: "150px",
-            textAlign: "center"
-          }}
-        >
-          <strong>Total Ratings</strong>
-          <div>{dash.totalRatings}</div>
+        <div className="bg-white shadow-md rounded-xl p-6 text-center border border-gray-200">
+          <strong className="text-xl">Total Ratings</strong>
+          <div className="text-3xl font-bold text-yellow-600 mt-2">
+            {dash.totalRatings}
+          </div>
         </div>
+
       </div>
     </div>
   );

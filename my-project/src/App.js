@@ -1,3 +1,4 @@
+// client/src/App.jsx
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -15,12 +16,15 @@ import StoreList from "./components/StoreList";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 import RoleRoute from "./utils/RoleRoute";
+import Navbar from "./components/Navbar";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
     <BrowserRouter>
+<Navbar/>
       <Routes>
-        {/* Public */}
+        {/* Public pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -44,21 +48,25 @@ function App() {
           }
         />
 
-        {/* System Admin */}
+        {/* ADMIN ROUTES WITH LAYOUT */}
         <Route
           path="/admin/dashboard"
           element={
             <RoleRoute allowedRoles={["SYSTEM_ADMIN"]}>
-              <AdminDashboard />
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
             </RoleRoute>
           }
         />
-        
+
         <Route
           path="/admin/create-user"
           element={
             <RoleRoute allowedRoles={["SYSTEM_ADMIN"]}>
-              <AdminCreateUser />
+              <AdminLayout>
+                <AdminCreateUser />
+              </AdminLayout>
             </RoleRoute>
           }
         />
@@ -67,7 +75,9 @@ function App() {
           path="/admin/create-store"
           element={
             <RoleRoute allowedRoles={["SYSTEM_ADMIN"]}>
-              <AdminCreateStore />
+              <AdminLayout>
+                <AdminCreateStore />
+              </AdminLayout>
             </RoleRoute>
           }
         />
@@ -76,7 +86,9 @@ function App() {
           path="/admin/stores"
           element={
             <RoleRoute allowedRoles={["SYSTEM_ADMIN"]}>
-              <AdminStoresTable />
+              <AdminLayout>
+                <AdminStoresTable />
+              </AdminLayout>
             </RoleRoute>
           }
         />
@@ -85,14 +97,15 @@ function App() {
           path="/admin/users"
           element={
             <RoleRoute allowedRoles={["SYSTEM_ADMIN"]}>
-              <AdminUsersTable />
+              <AdminLayout>
+                <AdminUsersTable />
+              </AdminLayout>
             </RoleRoute>
           }
         />
 
-        {/* Default redirect */}
+        {/* DEFAULT → LOGIN */}
         <Route path="*" element={<Login />} />
-
       </Routes>
     </BrowserRouter>
   );

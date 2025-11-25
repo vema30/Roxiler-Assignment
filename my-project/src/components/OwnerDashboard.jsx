@@ -13,8 +13,8 @@ export default function OwnerDashboard() {
     try {
       const res = await fetch(`${API}/owner/dashboard`, {
         headers: {
-          Authorization: token ? `Bearer ${token}` : ""
-        }
+          Authorization: token ? `Bearer ${token}` : "",
+        },
       });
 
       const json = await res.json();
@@ -35,45 +35,83 @@ export default function OwnerDashboard() {
     loadOwnerData();
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl">
+        Loading...
+      </div>
+    );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Store Owner Dashboard</h2>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">
+        Store Owner Dashboard
+      </h2>
+
+      {msg && <p className="text-red-600 text-center mb-4">{msg}</p>}
 
       {data.length === 0 ? (
-        <div>No stores found for this owner</div>
+        <div className="text-center text-gray-600 text-lg">
+          You have not created any stores yet.
+        </div>
       ) : (
-        data.map((store) => (
-          <div
-            key={store.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: 12,
-              marginBottom: 12,
-              borderRadius: "8px"
-            }}
-          >
-            <h3>
-              {store.name} — Avg:{" "}
-              {store.avgRating ? Number(store.avgRating).toFixed(2) : "—"}
-            </h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          {data.map((store) => (
+            <div
+              key={store.id}
+              className="bg-white p-5 rounded-xl shadow-md border border-gray-200"
+            >
+              <h3 className="text-xl font-semibold mb-1">
+                {store.name}
+                <span className="text-gray-600 text-sm ml-2">
+                  — Avg:{" "}
+                  <b>
+                    {store.avgRating
+                      ? Number(store.avgRating).toFixed(2)
+                      : "—"}
+                  </b>
+                </span>
+              </h3>
 
-            <p>Address: {store.address}</p>
-            <p>Total Ratings: {store.ratingsCount}</p>
+              <p className="text-gray-700">Address: {store.address}</p>
+              <p className="text-gray-700 mb-3">
+                Total Ratings: {store.ratingsCount}
+              </p>
 
-            <h4>Raters:</h4>
-            <ul>
-              {store.ratings.map((r) => (
-                <li key={r.id}>
-                  <strong>{r.user?.name}</strong> ({r.user?.email}) —{" "}
-                  <b>{r.rating}</b> — {r.comment || ""}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
+              <h4 className="text-lg font-semibold mb-2">Raters</h4>
+
+              <ul className="space-y-2">
+                {store.ratings.length === 0 && (
+                  <p className="text-gray-500 text-sm">No ratings yet</p>
+                )}
+
+                {store.ratings.map((r) => (
+                  <li
+                    key={r.id}
+                    className="bg-gray-100 p-2 rounded-lg flex flex-col"
+                  >
+                    <span className="font-bold">
+                      {r.user?.name}{" "}
+                      <span className="text-sm text-gray-500">
+                        ({r.user?.email})
+                      </span>
+                    </span>
+
+                    <span className="text-blue-600 font-semibold">
+                      ⭐ Rating: {r.rating}
+                    </span>
+
+                    {r.comment && (
+                      <span className="text-gray-600 mt-1 text-sm">
+                        “{r.comment}”
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

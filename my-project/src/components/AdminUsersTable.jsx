@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 export default function AdminUsersTable() {
   const API = "http://localhost:5000";
 
-
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
@@ -14,7 +13,7 @@ export default function AdminUsersTable() {
 
       try {
         const res = await fetch(`${API}/admin/users/list`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = await res.json();
@@ -34,43 +33,58 @@ export default function AdminUsersTable() {
     };
 
     loadUsers();
-  }, [API]);
+  }, []);
 
-  if (loading) return <div>Loading users...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl">
+        Loading users...
+      </div>
+    );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>User List</h2>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">User List</h2>
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+      {msg && <p className="text-red-600 text-center mb-4">{msg}</p>}
 
-      <table border="1" cellPadding="8" style={{ width: "100%", marginTop: "10px" }}>
-        <thead>
-          <tr style={{ backgroundColor: "#f0f0f0" }}>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.length === 0 ? (
+      <div className="overflow-x-auto shadow-lg rounded-lg">
+        <table className="w-full border-collapse">
+          <thead className="bg-gray-200 text-gray-700">
             <tr>
-              <td colSpan="4">No users found</td>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Address</th>
+              <th className="p-3 text-left">Role</th>
             </tr>
-          ) : (
-            users.map((u) => (
-              <tr key={u._id || u.id}>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.address}</td>
-                <td>{u.role}</td>
+          </thead>
+
+          <tbody>
+            {users.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="4"
+                  className="p-4 text-center text-gray-600 bg-gray-50"
+                >
+                  No users found
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              users.map((u) => (
+                <tr
+                  key={u._id || u.id}
+                  className="border-b hover:bg-gray-100 transition"
+                >
+                  <td className="p-3">{u.name}</td>
+                  <td className="p-3">{u.email}</td>
+                  <td className="p-3">{u.address}</td>
+                  <td className="p-3 font-semibold">{u.role}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

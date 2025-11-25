@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function AdminStoresTable() {
- // const API = import.meta.env.VITE_API_URL;
-const API = "http://localhost:5000";
+  const API = "http://localhost:5000";
 
   const [storesData, setStoresData] = useState(null);
   const [msg, setMsg] = useState("");
@@ -13,20 +12,18 @@ const API = "http://localhost:5000";
     page: 1,
     limit: 10,
     sort: "name",
-    order: "asc"
+    order: "asc",
   });
 
-  // Fetch admin stores from backend
   const loadStores = async () => {
     const token = localStorage.getItem("token");
-
     const query = new URLSearchParams(params).toString();
 
     try {
       const res = await fetch(`${API}/admin/stores/list?${query}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await res.json();
@@ -51,66 +48,90 @@ const API = "http://localhost:5000";
     setParams((prev) => ({
       ...prev,
       sort: field,
-      order: prev.order === "asc" ? "desc" : "asc"
+      order: prev.order === "asc" ? "desc" : "asc",
     }));
   };
 
-  if (!storesData) return <div>Loading stores...</div>;
+  if (!storesData)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-xl">
+        Loading stores...
+      </div>
+    );
 
   const { data, meta } = storesData;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Stores List</h2>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+    <div className="p-6 max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">Stores List</h2>
 
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
-      >
-        <thead>
-          <tr style={{ backgroundColor: "#f0f0f0" }}>
-            <th onClick={() => toggleSort("name")} style={{ cursor: "pointer" }}>
-              Name
-            </th>
-            <th onClick={() => toggleSort("email")} style={{ cursor: "pointer" }}>
-              Email
-            </th>
-            <th onClick={() => toggleSort("address")} style={{ cursor: "pointer" }}>
-              Address
-            </th>
-            <th onClick={() => toggleSort("avgRating")} style={{ cursor: "pointer" }}>
-              Avg Rating
-            </th>
-            <th>Ratings Count</th>
-          </tr>
-        </thead>
+      {msg && <p className="text-red-600 text-center mb-4">{msg}</p>}
 
-        <tbody>
-          {data.length === 0 ? (
+      <div className="overflow-x-auto shadow-lg rounded-lg">
+        <table className="w-full border-collapse">
+          <thead className="bg-gray-200 text-gray-700">
             <tr>
-              <td colSpan="5">No stores found</td>
+              <th
+                className="p-3 text-left cursor-pointer hover:bg-gray-300"
+                onClick={() => toggleSort("name")}
+              >
+                Name
+              </th>
+              <th
+                className="p-3 text-left cursor-pointer hover:bg-gray-300"
+                onClick={() => toggleSort("email")}
+              >
+                Email
+              </th>
+              <th
+                className="p-3 text-left cursor-pointer hover:bg-gray-300"
+                onClick={() => toggleSort("address")}
+              >
+                Address
+              </th>
+              <th
+                className="p-3 text-left cursor-pointer hover:bg-gray-300"
+                onClick={() => toggleSort("avgRating")}
+              >
+                Avg Rating
+              </th>
+              <th className="p-3 text-left">Ratings Count</th>
             </tr>
-          ) : (
-            data.map((s) => (
-              <tr key={s.id}>
-                <td>{s.name}</td>
-                <td>{s.email}</td>
-                <td>{s.address}</td>
-                <td>{s.avgRating ? Number(s.avgRating).toFixed(2) : "—"}</td>
-                <td>{s.ratingsCount}</td>
+          </thead>
+
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="p-4 text-center text-gray-600 bg-gray-50"
+                >
+                  No stores found
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              data.map((s) => (
+                <tr
+                  key={s.id}
+                  className="border-b hover:bg-gray-100 transition"
+                >
+                  <td className="p-3">{s.name}</td>
+                  <td className="p-3">{s.email}</td>
+                  <td className="p-3">{s.address}</td>
+                  <td className="p-3 font-semibold">
+                    {s.avgRating ? Number(s.avgRating).toFixed(2) : "—"}
+                  </td>
+                  <td className="p-3">{s.ratingsCount}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
-      <div style={{ marginTop: "10px" }}>
-        <strong>
-          Page {meta.page} / {Math.ceil(meta.total / meta.limit)}
-        </strong>
+      <div className="mt-4 text-center text-gray-700 font-semibold">
+        Page {meta.page} / {Math.ceil(meta.total / meta.limit)}
       </div>
     </div>
   );

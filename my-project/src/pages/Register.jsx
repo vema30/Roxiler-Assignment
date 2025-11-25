@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-  //const API = import.meta.env.VITE_API_URL; // backend url from .env
-const API = "http://localhost:5000";
+  const API = "http://localhost:5000";
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     address: "",
-    password: ""
+    password: "",
   });
 
   const [msg, setMsg] = useState("");
@@ -25,7 +24,7 @@ const API = "http://localhost:5000";
       const res = await fetch(`${API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
@@ -40,7 +39,6 @@ const API = "http://localhost:5000";
       localStorage.setItem("role", data.user.role);
 
       navigate("/stores");
-
     } catch (err) {
       setLoading(false);
       setMsg("Network error. Check backend connection.");
@@ -49,49 +47,73 @@ const API = "http://localhost:5000";
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Register</h2>
+    <div className="bg-blue-600 min-h-screen w-full flex items-center justify-center p-4">
+      <div className="bg-white text-black rounded-lg p-6 w-full max-w-md shadow-xl">
 
-      <form onSubmit={submit}>
-        <input
-          placeholder="Full Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
-        <br />
+        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-4">
+          Register
+        </h2>
 
-        <input
-          placeholder="Email"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
-        <br />
+        <p className="text-sm md:text-base text-center mb-4">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-500 border-b border-blue-500 hover:text-blue-700"
+          >
+            Login
+          </Link>
+        </p>
 
-        <input
-          placeholder="Address"
-          value={form.address}
-          onChange={(e) => setForm({ ...form, address: e.target.value })}
-        />
-        <br />
+        <form
+          onSubmit={submit}
+          className="bg-slate-200 p-4 rounded-md flex flex-col gap-3"
+        >
+          <input
+            placeholder="Full Name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+            className="p-2 rounded-lg border border-sky-300 w-full"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
-        <br />
+          <input
+            placeholder="Email"
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+            className="p-2 rounded-lg border border-sky-300 w-full"
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+          <input
+            placeholder="Address"
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+            className="p-2 rounded-lg border border-sky-300 w-full"
+          />
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+            className="p-2 rounded-lg border border-sky-300 w-full"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-red-500 text-white p-2 rounded-full w-full hover:bg-red-600 transition"
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
+        </form>
+
+        {msg && (
+          <p className="text-red-600 mt-3 text-center text-sm">{msg}</p>
+        )}
+      </div>
     </div>
   );
 }
