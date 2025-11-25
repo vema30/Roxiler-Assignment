@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function AdminStoresTable() {
-  const API = "http://localhost:5000";
+   const API = "https://roxiler-assignment-dsck.onrender.com/";
 
   const [storesData, setStoresData] = useState(null);
   const [msg, setMsg] = useState("");

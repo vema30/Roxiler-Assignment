@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function AdminUsersTable() {
-  const API = "http://localhost:5000";
+  const API = "https://roxiler-assignment-dsck.onrender.com/";
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

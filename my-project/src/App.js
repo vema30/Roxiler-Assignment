@@ -18,6 +18,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import RoleRoute from "./utils/RoleRoute";
 import Navbar from "./components/Navbar";
 import AdminLayout from "./layouts/AdminLayout";
+import UpdatePassword from "./pages/UpdatePassword";
 
 function App() {
   return (
@@ -92,6 +93,15 @@ function App() {
             </RoleRoute>
           }
         />
+        <Route
+  path="/update-password"
+  element={
+    <ProtectedRoute>
+      <UpdatePassword />
+    </ProtectedRoute>
+  }
+/>
+
 
         <Route
           path="/admin/users"

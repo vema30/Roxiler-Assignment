@@ -34,5 +34,32 @@ router.post("/login", async (req, res) => {
   const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "8h" });
   res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
 });
+// POST /auth/update-password
+router.post("/update-password", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    const valid = await bcrypt.compare(currentPassword, user.password);
+    if (!valid) return res.status(400).json({ message: "Incorrect password" });
+
+    const hash = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hash }
+    });
+
+    res.json({ message: "Password updated successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;

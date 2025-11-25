@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
-  const API = "http://localhost:5000";
+  const API = "https://roxiler-assignment-dsck.onrender.com/";
 
   const [dash, setDash] = useState(null);
   const [msg, setMsg] = useState("");
